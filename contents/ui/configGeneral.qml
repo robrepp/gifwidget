@@ -4,6 +4,7 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 Kirigami.FormLayout {
+
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     // Store selected radar station code. Cannot alias to ComboBox.currentValue
