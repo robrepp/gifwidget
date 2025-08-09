@@ -3,12 +3,11 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+
 Kirigami.FormLayout {
 
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
-    // Store selected radar station code. Cannot alias to ComboBox.currentValue
-    // because it is read-only.
     property string cfg_radarStation
 
     // default values injected by the KConfig loader
@@ -182,6 +181,7 @@ Kirigami.FormLayout {
         ListElement { stationCode: "KVNX"; stationName: "Vance AFB, OK" }
     }
 
+
     ListModel {
         id: displayModel
         Component.onCompleted: {
@@ -193,7 +193,7 @@ Kirigami.FormLayout {
                 append({ code: s.stationCode, name: s.stationName, display: display, active: active })
             }
         }
-    }
+
 
     QQC2.ComboBox {
             id: radarStationCombo
@@ -202,9 +202,11 @@ Kirigami.FormLayout {
             textRole: "display"
             valueRole: "code"
             delegate: QQC2.ItemDelegate {
+            
                 width: radarStationCombo.width
                 text: model.display
                 enabled: model.active
+
             }
 
 
