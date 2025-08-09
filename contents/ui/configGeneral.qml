@@ -15,6 +15,7 @@ KCM.SimpleKCM {
     ListModel {
         id: radarStationsModel
 
+        ListElement { stationCode: ""; stationName: i18n("Central Region"); active: false }
         ListElement { stationCode: "KABR"; stationName: "Aberdeen, SD" }
         ListElement { stationCode: "KBIS"; stationName: "Bismarck, ND" }
         ListElement { stationCode: "KFTG"; stationName: "Denver/Boulder, CO" }
@@ -53,6 +54,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KFSD"; stationName: "Sioux Falls, SD" }
         ListElement { stationCode: "KTWX"; stationName: "Topeka, KS" }
         ListElement { stationCode: "KICT"; stationName: "Wichita, KS" }
+        ListElement { stationCode: ""; stationName: i18n("Eastern Region"); active: false }
         ListElement { stationCode: "KVWX"; stationName: "Evansville, IN" }
         ListElement { stationCode: "KLTX"; stationName: "Wilmington, NC" }
         ListElement { stationCode: "KCCX"; stationName: "State College, PA" }
@@ -77,6 +79,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KOKX"; stationName: "New York City, NY" }
         ListElement { stationCode: "KCLX"; stationName: "Charleston, SC" }
         ListElement { stationCode: "KRLX"; stationName: "Charleston, WV" }
+        ListElement { stationCode: ""; stationName: i18n("Southern Region"); active: false }
         ListElement { stationCode: "KBRO"; stationName: "Brownsville, TX" }
         ListElement { stationCode: "KABX"; stationName: "Albuquerque, NM" }
         ListElement { stationCode: "KAMA"; stationName: "Amarillo, TX" }
@@ -109,6 +112,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KDGX"; stationName: "Jackson, MS" }
         ListElement { stationCode: "KSHV"; stationName: "Shreveport, LA" }
         ListElement { stationCode: "KHDC"; stationName: "New Orleans, LA" }
+        ListElement { stationCode: ""; stationName: i18n("Western Region"); active: false }
         ListElement { stationCode: "KLGX"; stationName: "Seattle, WA" }
         ListElement { stationCode: "KYUX"; stationName: "Yuma, AZ" }
         ListElement { stationCode: "KEMX"; stationName: "Tucson, AZ" }
@@ -137,6 +141,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KCBX"; stationName: "Boise, ID" }
         ListElement { stationCode: "KBLX"; stationName: "Billings, MT" }
         ListElement { stationCode: "KICX"; stationName: "Cedar City, UT" }
+        ListElement { stationCode: ""; stationName: i18n("Pacific Region"); active: false }
         ListElement { stationCode: "PABC"; stationName: "Bethel, AK" }
         ListElement { stationCode: "PAPD"; stationName: "Fairbanks, AK" }
         ListElement { stationCode: "PHKM"; stationName: "Kamuela, HI" }
@@ -149,6 +154,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "PACG"; stationName: "Sitka, AK" }
         ListElement { stationCode: "PHKI"; stationName: "South Kauai, HI" }
         ListElement { stationCode: "PHWA"; stationName: "South Shore, HI" }
+        ListElement { stationCode: ""; stationName: i18n("Other Sites"); active: false }
         ListElement { stationCode: "KFDR"; stationName: "Altus AFB, OK" }
         ListElement { stationCode: "PGUA"; stationName: "Guam" }
         ListElement { stationCode: "KBBX"; stationName: "Beale AFB, CA" }
@@ -177,7 +183,9 @@ KCM.SimpleKCM {
         Component.onCompleted: {
             for (var i = 0; i < radarStationsModel.count; ++i) {
                 var s = radarStationsModel.get(i);
-                append({ code: s.stationCode, name: s.stationName, display: s.stationCode + " - " + s.stationName })
+                var active = (s.active !== false)
+                var display = s.stationCode ? s.stationCode + " - " + s.stationName : s.stationName
+                append({ code: s.stationCode, name: s.stationName, display: display, active: active })
             }
         }
     }
@@ -189,17 +197,34 @@ KCM.SimpleKCM {
             model: displayModel
             textRole: "display"
             valueRole: "code"
+            delegate: QQC2.ItemDelegate {
+                width: parent.width
+                text: model.display
+                enabled: model.active
+            }
 
-            onCurrentValueChanged: {
-                cfg_radarStation = currentValue
-                gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
+
+    onActivated: {
+                if (displayModel.get(currentIndex).active) {
+                    gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
+                }
             }
 
             Component.onCompleted: {
+                var found = false
                 for (var i = 0; i < displayModel.count; ++i) {
                     if (displayModel.get(i).code === cfg_radarStation) {
                         currentIndex = i
+                        found = true
                         break
+                    }
+                }
+                if (!found) {
+                    for (var j = 0; j < displayModel.count; ++j) {
+                        if (displayModel.get(j).active) {
+                            currentIndex = j
+                            break
+                        }
                     }
                 }
             }
