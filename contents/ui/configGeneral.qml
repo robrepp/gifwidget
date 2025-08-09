@@ -12,6 +12,11 @@ KCM.SimpleKCM {
     // because it is read-only.
     property string cfg_radarStation
 
+    // default values injected by the KConfig loader
+    property string cfg_gifUrlDefault
+    property string cfg_radarStationDefault
+    property int cfg_refreshIntervalDefault
+
     ListModel {
         id: radarStationsModel
 
@@ -199,14 +204,15 @@ KCM.SimpleKCM {
             textRole: "display"
             valueRole: "code"
             delegate: QQC2.ItemDelegate {
-                width: parent.width
+                width: radarStationCombo.width
                 text: model.display
                 enabled: model.active
             }
 
 
-    onActivated: {
+            onActivated: {
                 if (displayModel.get(currentIndex).active) {
+                    cfg_radarStation = currentValue
                     gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
                 }
             }
@@ -224,6 +230,8 @@ KCM.SimpleKCM {
                     for (var j = 0; j < displayModel.count; ++j) {
                         if (displayModel.get(j).active) {
                             currentIndex = j
+                            cfg_radarStation = displayModel.get(j).code
+                            gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + cfg_radarStation + "_loop.gif"
                             break
                         }
                     }
