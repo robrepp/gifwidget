@@ -1,0 +1,23 @@
+{
+    "KPlugin": {
+        "Id": "org.kde.plasma.gifwidget",
+        "Name": "GIF Widget",
+        "Description": "Display and auto-refresh GIF images",
+        "Icon": "image-x-generic",
+        "Version": "1.0",
+        "Category": "Utilities",
+        "License": "GPL-2.0+",
+        "Website": "",
+        "FormFactors": ["desktop"],
+        "Authors": [
+            {
+                "Name": "GIF Widget Author",
+                "Email": "user@example.com"
+            }
+        ]
+    },
+    "KPackageType": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-Provides": ["org.kde.plasma.plasmoid"],
+    "MainScript": "ui/main.qml"
+}
