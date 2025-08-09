@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
 Kirigami.FormLayout {
-
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     property string cfg_radarStation
@@ -208,24 +207,28 @@ Kirigami.FormLayout {
                 enabled: model.active
 
             }
+        }
+
 
 
             onActivated: {
                 if (displayModel.get(currentIndex).active) {
                     cfg_radarStation = currentValue
                     gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
+
                 }
             }
-
-            Component.onCompleted: {
-                var found = false
-                for (var i = 0; i < displayModel.count; ++i) {
-                    if (displayModel.get(i).code === cfg_radarStation) {
-                        currentIndex = i
-                        found = true
+            if (!found) {
+                for (var j = 0; j < radarStationsModel.count; ++j) {
+                    var item = radarStationsModel.get(j)
+                    if (item.active) {
+                        currentIndex = j
+                        cfg_radarStation = item.code
+                        gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + item.code + "_loop.gif"
                         break
                     }
                 }
+
                 if (!found) {
                     for (var j = 0; j < displayModel.count; ++j) {
                         if (displayModel.get(j).active) {
@@ -238,6 +241,7 @@ Kirigami.FormLayout {
                 }
             }
         }
+    }
 
     QQC2.TextField {
         id: gifUrlField
