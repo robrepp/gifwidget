@@ -15,7 +15,7 @@ KCM.SimpleKCM {
     ListModel {
         id: radarStationsModel
 
-        ListElement { stationCode: ""; stationName: i18n("Central Region"); active: false }
+        ListElement { stationCode: ""; stationName: "Central Region"; active: false }
         ListElement { stationCode: "KABR"; stationName: "Aberdeen, SD" }
         ListElement { stationCode: "KBIS"; stationName: "Bismarck, ND" }
         ListElement { stationCode: "KFTG"; stationName: "Denver/Boulder, CO" }
@@ -54,7 +54,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KFSD"; stationName: "Sioux Falls, SD" }
         ListElement { stationCode: "KTWX"; stationName: "Topeka, KS" }
         ListElement { stationCode: "KICT"; stationName: "Wichita, KS" }
-        ListElement { stationCode: ""; stationName: i18n("Eastern Region"); active: false }
+        ListElement { stationCode: ""; stationName: "Eastern Region"; active: false }
         ListElement { stationCode: "KVWX"; stationName: "Evansville, IN" }
         ListElement { stationCode: "KLTX"; stationName: "Wilmington, NC" }
         ListElement { stationCode: "KCCX"; stationName: "State College, PA" }
@@ -79,7 +79,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KOKX"; stationName: "New York City, NY" }
         ListElement { stationCode: "KCLX"; stationName: "Charleston, SC" }
         ListElement { stationCode: "KRLX"; stationName: "Charleston, WV" }
-        ListElement { stationCode: ""; stationName: i18n("Southern Region"); active: false }
+        ListElement { stationCode: ""; stationName: "Southern Region"; active: false }
         ListElement { stationCode: "KBRO"; stationName: "Brownsville, TX" }
         ListElement { stationCode: "KABX"; stationName: "Albuquerque, NM" }
         ListElement { stationCode: "KAMA"; stationName: "Amarillo, TX" }
@@ -112,7 +112,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KDGX"; stationName: "Jackson, MS" }
         ListElement { stationCode: "KSHV"; stationName: "Shreveport, LA" }
         ListElement { stationCode: "KHDC"; stationName: "New Orleans, LA" }
-        ListElement { stationCode: ""; stationName: i18n("Western Region"); active: false }
+        ListElement { stationCode: ""; stationName: "Western Region"; active: false }
         ListElement { stationCode: "KLGX"; stationName: "Seattle, WA" }
         ListElement { stationCode: "KYUX"; stationName: "Yuma, AZ" }
         ListElement { stationCode: "KEMX"; stationName: "Tucson, AZ" }
@@ -141,7 +141,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KCBX"; stationName: "Boise, ID" }
         ListElement { stationCode: "KBLX"; stationName: "Billings, MT" }
         ListElement { stationCode: "KICX"; stationName: "Cedar City, UT" }
-        ListElement { stationCode: ""; stationName: i18n("Pacific Region"); active: false }
+        ListElement { stationCode: ""; stationName: "Pacific Region"; active: false }
         ListElement { stationCode: "PABC"; stationName: "Bethel, AK" }
         ListElement { stationCode: "PAPD"; stationName: "Fairbanks, AK" }
         ListElement { stationCode: "PHKM"; stationName: "Kamuela, HI" }
@@ -154,7 +154,7 @@ KCM.SimpleKCM {
         ListElement { stationCode: "PACG"; stationName: "Sitka, AK" }
         ListElement { stationCode: "PHKI"; stationName: "South Kauai, HI" }
         ListElement { stationCode: "PHWA"; stationName: "South Shore, HI" }
-        ListElement { stationCode: ""; stationName: i18n("Other Sites"); active: false }
+        ListElement { stationCode: ""; stationName: "Other Sites"; active: false }
         ListElement { stationCode: "KFDR"; stationName: "Altus AFB, OK" }
         ListElement { stationCode: "PGUA"; stationName: "Guam" }
         ListElement { stationCode: "KBBX"; stationName: "Beale AFB, CA" }
@@ -184,7 +184,8 @@ KCM.SimpleKCM {
             for (var i = 0; i < radarStationsModel.count; ++i) {
                 var s = radarStationsModel.get(i);
                 var active = (s.active !== false)
-                var display = s.stationCode ? s.stationCode + " - " + s.stationName : s.stationName
+                var translatedName = i18n(s.stationName)
+                var display = s.stationCode ? s.stationCode + " - " + translatedName : translatedName
                 append({ code: s.stationCode, name: s.stationName, display: display, active: active })
             }
         }
