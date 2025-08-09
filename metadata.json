@@ -2,17 +2,17 @@
     "KPlugin": {
         "Id": "org.kde.plasma.gifwidget",
         "Name": "GIF Widget",
-        "Description": "Display and auto-refresh GIF images",
+        "Description": "Display and auto-refresh GIF images from NWS radars",
         "Icon": "image-x-generic",
-        "Version": "1.0",
+        "Version": "0.1",
         "Category": "Utilities",
         "License": "GPL-2.0+",
         "Website": "",
         "FormFactors": ["desktop"],
         "Authors": [
             {
-                "Name": "GIF Widget Author",
-                "Email": "user@example.com"
+                "Name": "Rob Repp",
+                "Email": "robrepp@me.com"
             }
         ]
     },
