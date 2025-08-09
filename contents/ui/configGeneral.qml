@@ -8,7 +8,9 @@ import org.kde.kcmutils as KCM
 KCM.SimpleKCM {
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
-    property alias cfg_radarStation: radarStationCombo.currentValue
+    // Store selected radar station code. Cannot alias to ComboBox.currentValue
+    // because it is read-only.
+    property string cfg_radarStation
 
     ListModel {
         id: radarStationsModel
@@ -201,7 +203,8 @@ KCM.SimpleKCM {
                 enabled: model.active
             }
 
-            onActivated: {
+
+    onActivated: {
                 if (displayModel.get(currentIndex).active) {
                     gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
                 }
