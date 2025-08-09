@@ -3,10 +3,9 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import org.kde.kcm as KCM
 
-KCM.SimpleKCM {
-    // Configuration properties recognized by KConfig
+Kirigami.FormLayout {
+
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     property string cfg_radarStation
@@ -16,11 +15,8 @@ KCM.SimpleKCM {
     property string cfg_radarStationDefault
     property int cfg_refreshIntervalDefault
 
-    Kirigami.FormLayout {
-        anchors.fill: parent
-
-        ListModel {
-            id: radarStationsModel
+    ListModel {
+        id: radarStationsModel
 
         ListElement { stationCode: ""; stationName: "Central Region"; active: false }
         ListElement { stationCode: "KABR"; stationName: "Aberdeen, SD" }
@@ -185,31 +181,32 @@ KCM.SimpleKCM {
         ListElement { stationCode: "KVNX"; stationName: "Vance AFB, OK" }
     }
 
-        ListModel {
-            id: displayModel
-            Component.onCompleted: {
-                for (var i = 0; i < radarStationsModel.count; ++i) {
-                    var s = radarStationsModel.get(i);
-                    var active = (s.active !== false)
-                    var translatedName = i18n(s.stationName)
-                    var display = s.stationCode ? s.stationCode + " - " + translatedName : translatedName
-                    append({ code: s.stationCode, name: s.stationName, display: display, active: active })
-                }
+
+    ListModel {
+        id: displayModel
+        Component.onCompleted: {
+            for (var i = 0; i < radarStationsModel.count; ++i) {
+                var s = radarStationsModel.get(i);
+                var active = (s.active !== false)
+                var translatedName = i18n(s.stationName)
+                var display = s.stationCode ? s.stationCode + " - " + translatedName : translatedName
+                append({ code: s.stationCode, name: s.stationName, display: display, active: active })
             }
         }
 
-        QQC2.ComboBox {
+
+    QQC2.ComboBox {
             id: radarStationCombo
             Kirigami.FormData.label: i18n("Radar Station:")
             model: displayModel
             textRole: "display"
             valueRole: "code"
             delegate: QQC2.ItemDelegate {
-                required property string display
-                required property bool active
-                width: parent ? parent.width : implicitWidth
-                text: display
-                enabled: active
+            
+                width: radarStationCombo.width
+                text: model.display
+                enabled: model.active
+
             }
 
 
@@ -242,18 +239,17 @@ KCM.SimpleKCM {
             }
         }
 
-        QQC2.TextField {
-            id: gifUrlField
-            Kirigami.FormData.label: i18n("Custom GIF URL:")
-            placeholderText: i18n("Or enter custom URL here")
-        }
+    QQC2.TextField {
+        id: gifUrlField
+        Kirigami.FormData.label: i18n("Custom GIF URL:")
+        placeholderText: i18n("Or enter custom URL here")
+    }
 
-        QQC2.SpinBox {
-            id: refreshIntervalSpinBox
-            Kirigami.FormData.label: i18n("Refresh interval (minutes):")
-            from: 1
-            to: 1440
-            stepSize: 1
-        }
+    QQC2.SpinBox {
+        id: refreshIntervalSpinBox
+        Kirigami.FormData.label: i18n("Refresh interval (minutes):")
+        from: 1
+        to: 1440
+        stepSize: 1
     }
 }
