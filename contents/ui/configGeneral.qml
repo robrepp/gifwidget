@@ -4,8 +4,7 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 Kirigami.FormLayout {
-    // KConfig sets this property when loading the page
-    property string title
+
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     // Store selected radar station code. Cannot alias to ComboBox.currentValue
@@ -203,11 +202,9 @@ Kirigami.FormLayout {
             textRole: "display"
             valueRole: "code"
             delegate: QQC2.ItemDelegate {
-                required property string display
-                required property bool active
                 width: radarStationCombo.width
-                text: display
-                enabled: active
+                text: model.display
+                enabled: model.active
             }
 
 
