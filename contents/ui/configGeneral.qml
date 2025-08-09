@@ -190,7 +190,7 @@ KCM.SimpleKCM {
             textRole: "display"
             valueRole: "code"
 
-            onActivated: {
+            onCurrentValueChanged: {
                 cfg_radarStation = currentValue
                 gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
             }
