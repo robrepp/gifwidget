@@ -3,232 +3,229 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import org.kde.kcmutils as KCM
 
-KCM.SimpleKCM {
+Kirigami.FormLayout {
+    // Expose properties expected by KConfig
+    property string title
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
-    // Store selected radar station code. Cannot alias to ComboBox.currentValue
-    // because it is read-only.
     property string cfg_radarStation
 
-    ListModel {
-        id: radarStationsModel
+    // Default values injected by the KConfig loader
+    property string cfg_gifUrlDefault
+    property string cfg_radarStationDefault
+    property int cfg_refreshIntervalDefault
 
-        ListElement { stationCode: ""; stationName: i18n("Central Region"); active: false }
-        ListElement { stationCode: "KABR"; stationName: "Aberdeen, SD" }
-        ListElement { stationCode: "KBIS"; stationName: "Bismarck, ND" }
-        ListElement { stationCode: "KFTG"; stationName: "Denver/Boulder, CO" }
-        ListElement { stationCode: "KDMX"; stationName: "Des Moines, IA" }
-        ListElement { stationCode: "KDTX"; stationName: "Detroit, MI" }
-        ListElement { stationCode: "KDDC"; stationName: "Dodge City, KS" }
-        ListElement { stationCode: "KDLH"; stationName: "Duluth, MN" }
-        ListElement { stationCode: "KCYS"; stationName: "Cheyenne, WY" }
-        ListElement { stationCode: "KLOT"; stationName: "Chicago, IL" }
-        ListElement { stationCode: "KGLD"; stationName: "Goodland, KS" }
-        ListElement { stationCode: "KUEX"; stationName: "Grand Island/Hastings, NE" }
-        ListElement { stationCode: "KGJX"; stationName: "Grand Junction, CO" }
-        ListElement { stationCode: "KGRR"; stationName: "Grand Rapids, MI" }
-        ListElement { stationCode: "KMVX"; stationName: "Grand Forks, ND" }
-        ListElement { stationCode: "KGRB"; stationName: "Green Bay, WI" }
-        ListElement { stationCode: "KIND"; stationName: "Indianapolis, IN" }
-        ListElement { stationCode: "KJKL"; stationName: "Jackson, KY" }
-        ListElement { stationCode: "KARX"; stationName: "La Crosse, WI" }
-        ListElement { stationCode: "KILX"; stationName: "Lincoln, IL" }
-        ListElement { stationCode: "KLVX"; stationName: "Louisville, KY" }
-        ListElement { stationCode: "KMQT"; stationName: "Marquette, MI" }
-        ListElement { stationCode: "KMKX"; stationName: "Milwaukee, WI" }
-        ListElement { stationCode: "KMPX"; stationName: "Minneapolis, MN" }
-        ListElement { stationCode: "KAPX"; stationName: "Northern Michigan" }
-        ListElement { stationCode: "KLNX"; stationName: "North Platte, NE" }
-        ListElement { stationCode: "KIWX"; stationName: "Northern Indiana" }
-        ListElement { stationCode: "KOAX"; stationName: "Omaha, NE" }
-        ListElement { stationCode: "KPAH"; stationName: "Paducah, KY" }
-        ListElement { stationCode: "KEAX"; stationName: "Kansas City, MO" }
-        ListElement { stationCode: "KPUX"; stationName: "Pueblo, CO" }
-        ListElement { stationCode: "KDVN"; stationName: "Quad Cities, IA" }
-        ListElement { stationCode: "KUDX"; stationName: "Rapid City, SD" }
-        ListElement { stationCode: "KRIW"; stationName: "Riverton, WY" }
-        ListElement { stationCode: "KSGF"; stationName: "Springfield, MO" }
-        ListElement { stationCode: "KLSX"; stationName: "St. Louis, MO" }
-        ListElement { stationCode: "KFSD"; stationName: "Sioux Falls, SD" }
-        ListElement { stationCode: "KTWX"; stationName: "Topeka, KS" }
-        ListElement { stationCode: "KICT"; stationName: "Wichita, KS" }
-        ListElement { stationCode: ""; stationName: i18n("Eastern Region"); active: false }
-        ListElement { stationCode: "KVWX"; stationName: "Evansville, IN" }
-        ListElement { stationCode: "KLTX"; stationName: "Wilmington, NC" }
-        ListElement { stationCode: "KCCX"; stationName: "State College, PA" }
-        ListElement { stationCode: "KLWX"; stationName: "Sterling, VA" }
-        ListElement { stationCode: "KFCX"; stationName: "Roanoke, VA" }
-        ListElement { stationCode: "KRAX"; stationName: "Raleigh/Durham, NC" }
-        ListElement { stationCode: "KGYX"; stationName: "Portland, ME" }
-        ListElement { stationCode: "KDIX"; stationName: "Philadelphia, PA" }
-        ListElement { stationCode: "KPBZ"; stationName: "Pittsburgh, PA" }
-        ListElement { stationCode: "KAKQ"; stationName: "Norfolk, VA" }
-        ListElement { stationCode: "KMHX"; stationName: "Morehead City, NC" }
-        ListElement { stationCode: "KGSP"; stationName: "Greer, SC" }
-        ListElement { stationCode: "KILN"; stationName: "Cincinnati, OH" }
-        ListElement { stationCode: "KCLE"; stationName: "Cleveland, OH" }
-        ListElement { stationCode: "KCAE"; stationName: "Columbia, SC" }
-        ListElement { stationCode: "KBGM"; stationName: "Binghamton, NY" }
-        ListElement { stationCode: "KENX"; stationName: "Albany, NY" }
-        ListElement { stationCode: "KBUF"; stationName: "Buffalo, NY" }
-        ListElement { stationCode: "KCXX"; stationName: "Burlington, VT" }
-        ListElement { stationCode: "KCBW"; stationName: "Caribou, ME" }
-        ListElement { stationCode: "KBOX"; stationName: "Boston, MA" }
-        ListElement { stationCode: "KOKX"; stationName: "New York City, NY" }
-        ListElement { stationCode: "KCLX"; stationName: "Charleston, SC" }
-        ListElement { stationCode: "KRLX"; stationName: "Charleston, WV" }
-        ListElement { stationCode: ""; stationName: i18n("Southern Region"); active: false }
-        ListElement { stationCode: "KBRO"; stationName: "Brownsville, TX" }
-        ListElement { stationCode: "KABX"; stationName: "Albuquerque, NM" }
-        ListElement { stationCode: "KAMA"; stationName: "Amarillo, TX" }
-        ListElement { stationCode: "KFFC"; stationName: "Atlanta, GA" }
-        ListElement { stationCode: "KEWX"; stationName: "San Antonio, TX" }
-        ListElement { stationCode: "KBMX"; stationName: "Birmingham, AL" }
-        ListElement { stationCode: "KCRP"; stationName: "Corpus Christi, TX" }
-        ListElement { stationCode: "KFWS"; stationName: "Dallas/Ft Worth, TX" }
-        ListElement { stationCode: "KEPZ"; stationName: "El Paso, TX" }
-        ListElement { stationCode: "KHGX"; stationName: "Houston, TX" }
-        ListElement { stationCode: "KJAX"; stationName: "Jacksonville, FL" }
-        ListElement { stationCode: "KBYX"; stationName: "Key West, FL" }
-        ListElement { stationCode: "KMRX"; stationName: "Knoxville, TN" }
-        ListElement { stationCode: "KLBB"; stationName: "Lubbock, TX" }
-        ListElement { stationCode: "KLZK"; stationName: "Little Rock, AR" }
-        ListElement { stationCode: "KLCH"; stationName: "Lake Charles, LA" }
-        ListElement { stationCode: "KOHX"; stationName: "Nashville, TN" }
-        ListElement { stationCode: "KMLB"; stationName: "Melbourne, FL" }
-        ListElement { stationCode: "KNQA"; stationName: "Memphis, TN" }
-        ListElement { stationCode: "KAMX"; stationName: "Miami, FL" }
-        ListElement { stationCode: "KMAF"; stationName: "Midland/Odessa, TX" }
-        ListElement { stationCode: "KTLX"; stationName: "Oklahoma City, OK" }
-        ListElement { stationCode: "KHTX"; stationName: "Huntsville, AL" }
-        ListElement { stationCode: "KMOB"; stationName: "Mobile, AL" }
-        ListElement { stationCode: "KTLH"; stationName: "Tallahassee, FL" }
-        ListElement { stationCode: "KTBW"; stationName: "Tampa, FL" }
-        ListElement { stationCode: "KSJT"; stationName: "San Angelo, TX" }
-        ListElement { stationCode: "KINX"; stationName: "Tulsa, OK" }
-        ListElement { stationCode: "KSRX"; stationName: "Western Arkansas" }
-        ListElement { stationCode: "KDGX"; stationName: "Jackson, MS" }
-        ListElement { stationCode: "KSHV"; stationName: "Shreveport, LA" }
-        ListElement { stationCode: "KHDC"; stationName: "New Orleans, LA" }
-        ListElement { stationCode: ""; stationName: i18n("Western Region"); active: false }
-        ListElement { stationCode: "KLGX"; stationName: "Seattle, WA" }
-        ListElement { stationCode: "KYUX"; stationName: "Yuma, AZ" }
-        ListElement { stationCode: "KEMX"; stationName: "Tucson, AZ" }
-        ListElement { stationCode: "KOTX"; stationName: "Spokane, WA" }
-        ListElement { stationCode: "KNKX"; stationName: "San Diego, CA" }
-        ListElement { stationCode: "KMUX"; stationName: "San Francisco, CA" }
-        ListElement { stationCode: "KHNX"; stationName: "San Joaquin Valley, CA" }
-        ListElement { stationCode: "KSOX"; stationName: "Santa Ana Mtns, CA" }
-        ListElement { stationCode: "KATX"; stationName: "Seattle/Tacoma, WA" }
-        ListElement { stationCode: "KIWA"; stationName: "Phoenix, AZ" }
-        ListElement { stationCode: "KRTX"; stationName: "Portland, OR" }
-        ListElement { stationCode: "KSFX"; stationName: "Pocatello, ID" }
-        ListElement { stationCode: "KRGX"; stationName: "Reno, NV" }
-        ListElement { stationCode: "KDAX"; stationName: "Sacramento, CA" }
-        ListElement { stationCode: "KMTX"; stationName: "Salt Lake City, UT" }
-        ListElement { stationCode: "KPDT"; stationName: "Pendleton, OR" }
-        ListElement { stationCode: "KMSX"; stationName: "Missoula, MT" }
-        ListElement { stationCode: "KESX"; stationName: "Las Vegas, NV" }
-        ListElement { stationCode: "KVTX"; stationName: "Los Angeles, CA" }
-        ListElement { stationCode: "KMAX"; stationName: "Medford, OR" }
-        ListElement { stationCode: "KFSX"; stationName: "Flagstaff, AZ" }
-        ListElement { stationCode: "KGGW"; stationName: "Glasgow, MT" }
-        ListElement { stationCode: "KLRX"; stationName: "Elko, NV" }
-        ListElement { stationCode: "KBHX"; stationName: "Eureka, CA" }
-        ListElement { stationCode: "KTFX"; stationName: "Great Falls, MT" }
-        ListElement { stationCode: "KCBX"; stationName: "Boise, ID" }
-        ListElement { stationCode: "KBLX"; stationName: "Billings, MT" }
-        ListElement { stationCode: "KICX"; stationName: "Cedar City, UT" }
-        ListElement { stationCode: ""; stationName: i18n("Pacific Region"); active: false }
-        ListElement { stationCode: "PABC"; stationName: "Bethel, AK" }
-        ListElement { stationCode: "PAPD"; stationName: "Fairbanks, AK" }
-        ListElement { stationCode: "PHKM"; stationName: "Kamuela, HI" }
-        ListElement { stationCode: "PAHG"; stationName: "Kenai, AK" }
-        ListElement { stationCode: "PAKC"; stationName: "King Salmon, AK" }
-        ListElement { stationCode: "PAIH"; stationName: "Middleton Island, AK" }
-        ListElement { stationCode: "PHMO"; stationName: "Molokai, HI" }
-        ListElement { stationCode: "PAEC"; stationName: "Nome, AK" }
-        ListElement { stationCode: "TJUA"; stationName: "San Juan, PR" }
-        ListElement { stationCode: "PACG"; stationName: "Sitka, AK" }
-        ListElement { stationCode: "PHKI"; stationName: "South Kauai, HI" }
-        ListElement { stationCode: "PHWA"; stationName: "South Shore, HI" }
-        ListElement { stationCode: ""; stationName: i18n("Other Sites"); active: false }
-        ListElement { stationCode: "KFDR"; stationName: "Altus AFB, OK" }
-        ListElement { stationCode: "PGUA"; stationName: "Guam" }
-        ListElement { stationCode: "KBBX"; stationName: "Beale AFB, CA" }
-        ListElement { stationCode: "KFDX"; stationName: "Cannon AFB, NM" }
-        ListElement { stationCode: "KGWX"; stationName: "Columbus AFB, MS" }
-        ListElement { stationCode: "KDOX"; stationName: "Dover AFB, DE" }
-        ListElement { stationCode: "KDYX"; stationName: "Dyess AFB, TX" }
-        ListElement { stationCode: "KEYX"; stationName: "Edwards AFB, CA" }
-        ListElement { stationCode: "KEVX"; stationName: "Eglin AFB, FL" }
-        ListElement { stationCode: "KHPX"; stationName: "Fort Campbell, KY" }
-        ListElement { stationCode: "KGRK"; stationName: "Fort Cavazos, TX" }
-        ListElement { stationCode: "KTYX"; stationName: "Fort Drum, NY" }
-        ListElement { stationCode: "KPOE"; stationName: "Fort Johnson, LA" }
-        ListElement { stationCode: "KEOX"; stationName: "Fort Novosel, AL" }
-        ListElement { stationCode: "KHDX"; stationName: "Holloman AFB, NM" }
-        ListElement { stationCode: "KDFX"; stationName: "Laughlin AFB, TX" }
-        ListElement { stationCode: "KMXX"; stationName: "Maxwell AFB, AL" }
-        ListElement { stationCode: "KMBX"; stationName: "Minot AFB, ND" }
-        ListElement { stationCode: "KVAX"; stationName: "Moody AFB, GA" }
-        ListElement { stationCode: "KJGX"; stationName: "Robins AFB, GA" }
-        ListElement { stationCode: "KVNX"; stationName: "Vance AFB, OK" }
+        ListModel {
+            id: radarStationsModel
+
+        ListElement { code: ""; name: "Central Region"; active: false }
+        ListElement { code: "KABR"; name: "Aberdeen, SD" }
+        ListElement { code: "KBIS"; name: "Bismarck, ND" }
+        ListElement { code: "KFTG"; name: "Denver/Boulder, CO" }
+        ListElement { code: "KDMX"; name: "Des Moines, IA" }
+        ListElement { code: "KDTX"; name: "Detroit, MI" }
+        ListElement { code: "KDDC"; name: "Dodge City, KS" }
+        ListElement { code: "KDLH"; name: "Duluth, MN" }
+        ListElement { code: "KCYS"; name: "Cheyenne, WY" }
+        ListElement { code: "KLOT"; name: "Chicago, IL" }
+        ListElement { code: "KGLD"; name: "Goodland, KS" }
+        ListElement { code: "KUEX"; name: "Grand Island/Hastings, NE" }
+        ListElement { code: "KGJX"; name: "Grand Junction, CO" }
+        ListElement { code: "KGRR"; name: "Grand Rapids, MI" }
+        ListElement { code: "KMVX"; name: "Grand Forks, ND" }
+        ListElement { code: "KGRB"; name: "Green Bay, WI" }
+        ListElement { code: "KIND"; name: "Indianapolis, IN" }
+        ListElement { code: "KJKL"; name: "Jackson, KY" }
+        ListElement { code: "KARX"; name: "La Crosse, WI" }
+        ListElement { code: "KILX"; name: "Lincoln, IL" }
+        ListElement { code: "KLVX"; name: "Louisville, KY" }
+        ListElement { code: "KMQT"; name: "Marquette, MI" }
+        ListElement { code: "KMKX"; name: "Milwaukee, WI" }
+        ListElement { code: "KMPX"; name: "Minneapolis, MN" }
+        ListElement { code: "KAPX"; name: "Northern Michigan" }
+        ListElement { code: "KLNX"; name: "North Platte, NE" }
+        ListElement { code: "KIWX"; name: "Northern Indiana" }
+        ListElement { code: "KOAX"; name: "Omaha, NE" }
+        ListElement { code: "KPAH"; name: "Paducah, KY" }
+        ListElement { code: "KEAX"; name: "Kansas City, MO" }
+        ListElement { code: "KPUX"; name: "Pueblo, CO" }
+        ListElement { code: "KDVN"; name: "Quad Cities, IA" }
+        ListElement { code: "KUDX"; name: "Rapid City, SD" }
+        ListElement { code: "KRIW"; name: "Riverton, WY" }
+        ListElement { code: "KSGF"; name: "Springfield, MO" }
+        ListElement { code: "KLSX"; name: "St. Louis, MO" }
+        ListElement { code: "KFSD"; name: "Sioux Falls, SD" }
+        ListElement { code: "KTWX"; name: "Topeka, KS" }
+        ListElement { code: "KICT"; name: "Wichita, KS" }
+        ListElement { code: ""; name: "Eastern Region"; active: false }
+        ListElement { code: "KVWX"; name: "Evansville, IN" }
+        ListElement { code: "KLTX"; name: "Wilmington, NC" }
+        ListElement { code: "KCCX"; name: "State College, PA" }
+        ListElement { code: "KLWX"; name: "Sterling, VA" }
+        ListElement { code: "KFCX"; name: "Roanoke, VA" }
+        ListElement { code: "KRAX"; name: "Raleigh/Durham, NC" }
+        ListElement { code: "KGYX"; name: "Portland, ME" }
+        ListElement { code: "KDIX"; name: "Philadelphia, PA" }
+        ListElement { code: "KPBZ"; name: "Pittsburgh, PA" }
+        ListElement { code: "KAKQ"; name: "Norfolk, VA" }
+        ListElement { code: "KMHX"; name: "Morehead City, NC" }
+        ListElement { code: "KGSP"; name: "Greer, SC" }
+        ListElement { code: "KILN"; name: "Cincinnati, OH" }
+        ListElement { code: "KCLE"; name: "Cleveland, OH" }
+        ListElement { code: "KCAE"; name: "Columbia, SC" }
+        ListElement { code: "KBGM"; name: "Binghamton, NY" }
+        ListElement { code: "KENX"; name: "Albany, NY" }
+        ListElement { code: "KBUF"; name: "Buffalo, NY" }
+        ListElement { code: "KCXX"; name: "Burlington, VT" }
+        ListElement { code: "KCBW"; name: "Caribou, ME" }
+        ListElement { code: "KBOX"; name: "Boston, MA" }
+        ListElement { code: "KOKX"; name: "New York City, NY" }
+        ListElement { code: "KCLX"; name: "Charleston, SC" }
+        ListElement { code: "KRLX"; name: "Charleston, WV" }
+        ListElement { code: ""; name: "Southern Region"; active: false }
+        ListElement { code: "KBRO"; name: "Brownsville, TX" }
+        ListElement { code: "KABX"; name: "Albuquerque, NM" }
+        ListElement { code: "KAMA"; name: "Amarillo, TX" }
+        ListElement { code: "KFFC"; name: "Atlanta, GA" }
+        ListElement { code: "KEWX"; name: "San Antonio, TX" }
+        ListElement { code: "KBMX"; name: "Birmingham, AL" }
+        ListElement { code: "KCRP"; name: "Corpus Christi, TX" }
+        ListElement { code: "KFWS"; name: "Dallas/Ft Worth, TX" }
+        ListElement { code: "KEPZ"; name: "El Paso, TX" }
+        ListElement { code: "KHGX"; name: "Houston, TX" }
+        ListElement { code: "KJAX"; name: "Jacksonville, FL" }
+        ListElement { code: "KBYX"; name: "Key West, FL" }
+        ListElement { code: "KMRX"; name: "Knoxville, TN" }
+        ListElement { code: "KLBB"; name: "Lubbock, TX" }
+        ListElement { code: "KLZK"; name: "Little Rock, AR" }
+        ListElement { code: "KLCH"; name: "Lake Charles, LA" }
+        ListElement { code: "KOHX"; name: "Nashville, TN" }
+        ListElement { code: "KMLB"; name: "Melbourne, FL" }
+        ListElement { code: "KNQA"; name: "Memphis, TN" }
+        ListElement { code: "KAMX"; name: "Miami, FL" }
+        ListElement { code: "KMAF"; name: "Midland/Odessa, TX" }
+        ListElement { code: "KTLX"; name: "Oklahoma City, OK" }
+        ListElement { code: "KHTX"; name: "Huntsville, AL" }
+        ListElement { code: "KMOB"; name: "Mobile, AL" }
+        ListElement { code: "KTLH"; name: "Tallahassee, FL" }
+        ListElement { code: "KTBW"; name: "Tampa, FL" }
+        ListElement { code: "KSJT"; name: "San Angelo, TX" }
+        ListElement { code: "KINX"; name: "Tulsa, OK" }
+        ListElement { code: "KSRX"; name: "Western Arkansas" }
+        ListElement { code: "KDGX"; name: "Jackson, MS" }
+        ListElement { code: "KSHV"; name: "Shreveport, LA" }
+        ListElement { code: "KHDC"; name: "New Orleans, LA" }
+        ListElement { code: ""; name: "Western Region"; active: false }
+        ListElement { code: "KLGX"; name: "Seattle, WA" }
+        ListElement { code: "KYUX"; name: "Yuma, AZ" }
+        ListElement { code: "KEMX"; name: "Tucson, AZ" }
+        ListElement { code: "KOTX"; name: "Spokane, WA" }
+        ListElement { code: "KNKX"; name: "San Diego, CA" }
+        ListElement { code: "KMUX"; name: "San Francisco, CA" }
+        ListElement { code: "KHNX"; name: "San Joaquin Valley, CA" }
+        ListElement { code: "KSOX"; name: "Santa Ana Mtns, CA" }
+        ListElement { code: "KATX"; name: "Seattle/Tacoma, WA" }
+        ListElement { code: "KIWA"; name: "Phoenix, AZ" }
+        ListElement { code: "KRTX"; name: "Portland, OR" }
+        ListElement { code: "KSFX"; name: "Pocatello, ID" }
+        ListElement { code: "KRGX"; name: "Reno, NV" }
+        ListElement { code: "KDAX"; name: "Sacramento, CA" }
+        ListElement { code: "KMTX"; name: "Salt Lake City, UT" }
+        ListElement { code: "KPDT"; name: "Pendleton, OR" }
+        ListElement { code: "KMSX"; name: "Missoula, MT" }
+        ListElement { code: "KESX"; name: "Las Vegas, NV" }
+        ListElement { code: "KVTX"; name: "Los Angeles, CA" }
+        ListElement { code: "KMAX"; name: "Medford, OR" }
+        ListElement { code: "KFSX"; name: "Flagstaff, AZ" }
+        ListElement { code: "KGGW"; name: "Glasgow, MT" }
+        ListElement { code: "KLRX"; name: "Elko, NV" }
+        ListElement { code: "KBHX"; name: "Eureka, CA" }
+        ListElement { code: "KTFX"; name: "Great Falls, MT" }
+        ListElement { code: "KCBX"; name: "Boise, ID" }
+        ListElement { code: "KBLX"; name: "Billings, MT" }
+        ListElement { code: "KICX"; name: "Cedar City, UT" }
+        ListElement { code: ""; name: "Pacific Region"; active: false }
+        ListElement { code: "PABC"; name: "Bethel, AK" }
+        ListElement { code: "PAPD"; name: "Fairbanks, AK" }
+        ListElement { code: "PHKM"; name: "Kamuela, HI" }
+        ListElement { code: "PAHG"; name: "Kenai, AK" }
+        ListElement { code: "PAKC"; name: "King Salmon, AK" }
+        ListElement { code: "PAIH"; name: "Middleton Island, AK" }
+        ListElement { code: "PHMO"; name: "Molokai, HI" }
+        ListElement { code: "PAEC"; name: "Nome, AK" }
+        ListElement { code: "TJUA"; name: "San Juan, PR" }
+        ListElement { code: "PACG"; name: "Sitka, AK" }
+        ListElement { code: "PHKI"; name: "South Kauai, HI" }
+        ListElement { code: "PHWA"; name: "South Shore, HI" }
+        ListElement { code: ""; name: "Other Sites"; active: false }
+        ListElement { code: "KFDR"; name: "Altus AFB, OK" }
+        ListElement { code: "PGUA"; name: "Guam" }
+        ListElement { code: "KBBX"; name: "Beale AFB, CA" }
+        ListElement { code: "KFDX"; name: "Cannon AFB, NM" }
+        ListElement { code: "KGWX"; name: "Columbus AFB, MS" }
+        ListElement { code: "KDOX"; name: "Dover AFB, DE" }
+        ListElement { code: "KDYX"; name: "Dyess AFB, TX" }
+        ListElement { code: "KEYX"; name: "Edwards AFB, CA" }
+        ListElement { code: "KEVX"; name: "Eglin AFB, FL" }
+        ListElement { code: "KHPX"; name: "Fort Campbell, KY" }
+        ListElement { code: "KGRK"; name: "Fort Cavazos, TX" }
+        ListElement { code: "KTYX"; name: "Fort Drum, NY" }
+        ListElement { code: "KPOE"; name: "Fort Johnson, LA" }
+        ListElement { code: "KEOX"; name: "Fort Novosel, AL" }
+        ListElement { code: "KHDX"; name: "Holloman AFB, NM" }
+        ListElement { code: "KDFX"; name: "Laughlin AFB, TX" }
+        ListElement { code: "KMXX"; name: "Maxwell AFB, AL" }
+        ListElement { code: "KMBX"; name: "Minot AFB, ND" }
+        ListElement { code: "KVAX"; name: "Moody AFB, GA" }
+        ListElement { code: "KJGX"; name: "Robins AFB, GA" }
+        ListElement { code: "KVNX"; name: "Vance AFB, OK" }
     }
 
-    ListModel {
-        id: displayModel
-        Component.onCompleted: {
-            for (var i = 0; i < radarStationsModel.count; ++i) {
-                var s = radarStationsModel.get(i);
-                var active = (s.active !== false)
-                var display = s.stationCode ? s.stationCode + " - " + s.stationName : s.stationName
-                append({ code: s.stationCode, name: s.stationName, display: display, active: active })
+    QQC2.ComboBox {
+        id: radarStationCombo
+        Kirigami.FormData.label: i18n("Radar Station:")
+        model: radarStationsModel
+        valueRole: "code"
+        delegate: QQC2.ItemDelegate {
+            required property string code
+            required property string name
+            required property bool active: true
+            width: parent ? parent.width : implicitWidth
+            text: code ? code + " - " + i18n(name) : i18n(name)
+            enabled: active
+        }
+
+        onActivated: {
+            var item = radarStationsModel.get(currentIndex)
+            if (item.active) {
+                cfg_radarStation = item.code
+                gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + item.code + "_loop.gif"
             }
         }
-    }
 
-    Kirigami.FormLayout {
-        QQC2.ComboBox {
-            id: radarStationCombo
-            Kirigami.FormData.label: i18n("Radar Station:")
-            model: displayModel
-            textRole: "display"
-            valueRole: "code"
-            delegate: QQC2.ItemDelegate {
-                width: parent.width
-                text: model.display
-                enabled: model.active
-            }
-
-
-    onActivated: {
-                if (displayModel.get(currentIndex).active) {
-                    gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
+        Component.onCompleted: {
+            var found = false
+            for (var i = 0; i < radarStationsModel.count; ++i) {
+                if (radarStationsModel.get(i).code === cfg_radarStation) {
+                    currentIndex = i
+                    found = true
+                    break
                 }
             }
-
-            Component.onCompleted: {
-                var found = false
-                for (var i = 0; i < displayModel.count; ++i) {
-                    if (displayModel.get(i).code === cfg_radarStation) {
-                        currentIndex = i
-                        found = true
+            if (!found) {
+                for (var j = 0; j < radarStationsModel.count; ++j) {
+                    var item = radarStationsModel.get(j)
+                    if (item.active) {
+                        currentIndex = j
+                        cfg_radarStation = item.code
+                        gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + item.code + "_loop.gif"
                         break
                     }
                 }
-                if (!found) {
-                    for (var j = 0; j < displayModel.count; ++j) {
-                        if (displayModel.get(j).active) {
-                            currentIndex = j
-                            break
-                        }
-                    }
-                }
             }
         }
+    }
 
         QQC2.TextField {
             id: gifUrlField
@@ -236,12 +233,11 @@ KCM.SimpleKCM {
             placeholderText: i18n("Or enter custom URL here")
         }
 
-        QQC2.SpinBox {
-            id: refreshIntervalSpinBox
-            Kirigami.FormData.label: i18n("Refresh interval (minutes):")
-            from: 1
-            to: 1440
-            stepSize: 1
-        }
+    QQC2.SpinBox {
+        id: refreshIntervalSpinBox
+        Kirigami.FormData.label: i18n("Refresh interval (minutes):")
+        from: 1
+        to: 1440
+        stepSize: 1
     }
 }
