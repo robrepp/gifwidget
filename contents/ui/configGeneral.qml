@@ -3,9 +3,7 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import org.kde.kcmutils as KCM
-
-KCM.SimpleKCM {
+Kirigami.FormLayout {
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     // Store selected radar station code. Cannot alias to ComboBox.currentValue
@@ -196,8 +194,7 @@ KCM.SimpleKCM {
         }
     }
 
-    Kirigami.FormLayout {
-        QQC2.ComboBox {
+    QQC2.ComboBox {
             id: radarStationCombo
             Kirigami.FormData.label: i18n("Radar Station:")
             model: displayModel
@@ -239,18 +236,17 @@ KCM.SimpleKCM {
             }
         }
 
-        QQC2.TextField {
-            id: gifUrlField
-            Kirigami.FormData.label: i18n("Custom GIF URL:")
-            placeholderText: i18n("Or enter custom URL here")
-        }
+    QQC2.TextField {
+        id: gifUrlField
+        Kirigami.FormData.label: i18n("Custom GIF URL:")
+        placeholderText: i18n("Or enter custom URL here")
+    }
 
-        QQC2.SpinBox {
-            id: refreshIntervalSpinBox
-            Kirigami.FormData.label: i18n("Refresh interval (minutes):")
-            from: 1
-            to: 1440
-            stepSize: 1
-        }
+    QQC2.SpinBox {
+        id: refreshIntervalSpinBox
+        Kirigami.FormData.label: i18n("Refresh interval (minutes):")
+        from: 1
+        to: 1440
+        stepSize: 1
     }
 }
