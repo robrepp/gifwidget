@@ -3,8 +3,9 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import org.kde.kcmutils as KCM
 
-Kirigami.FormLayout {
+KCM.SimpleKCM {
     property alias cfg_gifUrl: gifUrlField.text
     property alias cfg_refreshInterval: refreshIntervalSpinBox.value
     property string cfg_radarStation
@@ -180,7 +181,6 @@ Kirigami.FormLayout {
         ListElement { stationCode: "KVNX"; stationName: "Vance AFB, OK" }
     }
 
-
     ListModel {
         id: displayModel
         Component.onCompleted: {
@@ -192,68 +192,79 @@ Kirigami.FormLayout {
                 append({ code: s.stationCode, name: s.stationName, display: display, active: active })
             }
         }
+    }
 
+    Kirigami.FormLayout {
+        id: formLayout
 
-    QQC2.ComboBox {
+        QQC2.ComboBox {
             id: radarStationCombo
             Kirigami.FormData.label: i18n("Radar Station:")
             model: displayModel
             textRole: "display"
             valueRole: "code"
+
             delegate: QQC2.ItemDelegate {
-            
                 width: radarStationCombo.width
                 text: model.display
-                enabled: model.active
-
+                font.bold: model.code === ""
             }
-        }
 
-
+            // Scroll popup to show current selection when opened
+            onPressedChanged: {
+                if (pressed && popup.contentItem && popup.contentItem.positionViewAtIndex) {
+                    popup.contentItem.positionViewAtIndex(currentIndex, ListView.Center)
+                }
+            }
 
             onActivated: {
-                if (displayModel.get(currentIndex).active) {
+                var item = displayModel.get(currentIndex)
+                if (item.code !== "") {
                     cfg_radarStation = currentValue
                     gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + currentValue + "_loop.gif"
-
                 }
             }
-            if (!found) {
-                for (var j = 0; j < radarStationsModel.count; ++j) {
-                    var item = radarStationsModel.get(j)
-                    if (item.active) {
-                        currentIndex = j
-                        cfg_radarStation = item.code
-                        gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + item.code + "_loop.gif"
-                        break
+
+            // Find the index for the current station
+            function findStationIndex(stationCode) {
+                for (var i = 0; i < displayModel.count; ++i) {
+                    if (displayModel.get(i).code === stationCode) {
+                        return i
                     }
                 }
-
-                if (!found) {
-                    for (var j = 0; j < displayModel.count; ++j) {
-                        if (displayModel.get(j).active) {
-                            currentIndex = j
-                            cfg_radarStation = displayModel.get(j).code
-                            gifUrlField.text = "https://radar.weather.gov/ridge/standard/" + cfg_radarStation + "_loop.gif"
-                            break
-                        }
+                // Fallback: find first active station
+                for (var j = 0; j < displayModel.count; ++j) {
+                    if (displayModel.get(j).active) {
+                        return j
                     }
+                }
+                return 0
+            }
+
+            // Use a Timer to ensure displayModel is populated before setting index
+            Timer {
+                id: initTimer
+                interval: 0
+                running: true
+                onTriggered: {
+                    var idx = radarStationCombo.findStationIndex(cfg_radarStation)
+                    radarStationCombo.currentIndex = idx
                 }
             }
         }
-    }
 
-    QQC2.TextField {
-        id: gifUrlField
-        Kirigami.FormData.label: i18n("Custom GIF URL:")
-        placeholderText: i18n("Or enter custom URL here")
-    }
+        QQC2.TextField {
+            id: gifUrlField
+            Kirigami.FormData.label: i18n("Custom GIF URL:")
+            placeholderText: i18n("Or enter custom URL here")
+        }
 
-    QQC2.SpinBox {
-        id: refreshIntervalSpinBox
-        Kirigami.FormData.label: i18n("Refresh interval (minutes):")
-        from: 1
-        to: 1440
-        stepSize: 1
+        QQC2.SpinBox {
+            id: refreshIntervalSpinBox
+            Kirigami.FormData.label: i18n("Refresh interval (minutes):")
+            from: 1
+            to: 1440
+            stepSize: 1
+        }
     }
 }
