@@ -50,8 +50,18 @@ PlasmoidItem {
         onTriggered: root.refreshNow()
     }
 
+    Connections {
+        target: Plasmoid.configuration
+        function onRefreshIntervalChanged() {
+            refreshTimer.interval = (Plasmoid.configuration.refreshInterval || 5) * 60 * 1000
+            refreshTimer.restart()
+        }
+    }
+
     fullRepresentation: Item {
         id: fullRep
+        Layout.preferredWidth: 600
+        Layout.preferredHeight: 550
 
         AnimatedImage {
             id: gifImage

@@ -259,6 +259,13 @@ KCM.SimpleKCM {
             placeholderText: i18n("Or enter custom URL here")
         }
 
+        Kirigami.InlineMessage {
+            Layout.fillWidth: true
+            type: Kirigami.MessageType.Warning
+            text: i18n("URL must start with https://")
+            visible: gifUrlField.text.length > 0 && !gifUrlField.text.startsWith("https://")
+        }
+
         QQC2.SpinBox {
             id: refreshIntervalSpinBox
             Kirigami.FormData.label: i18n("Refresh interval (minutes):")
