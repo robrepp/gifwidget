@@ -13,6 +13,7 @@ PlasmoidItem {
     onConfiguredUrlChanged: {
         if (configuredUrl) {
             refreshNow()
+            refreshTimer.restart()
         }
     }
 
@@ -36,7 +37,6 @@ PlasmoidItem {
         // Add cache-busting parameter
         var separator = url.indexOf("?") >= 0 ? "&" : "?"
         gifSource = url + separator + "_t=" + Date.now()
-        refreshTimer.restart()
     }
 
     // Timer at root level so it persists regardless of representation lifecycle
@@ -88,7 +88,7 @@ PlasmoidItem {
         PlasmaCore.Action {
             text: i18n("Refresh Now")
             icon.name: "view-refresh"
-            onTriggered: root.refreshNow()
+            onTriggered: { root.refreshNow(); refreshTimer.restart() }
         }
     ]
 }
