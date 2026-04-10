@@ -32,9 +32,6 @@ PlasmoidItem {
     function refreshNow() {
         var url = Plasmoid.configuration.gifUrl
         if (!url) return
-        // Clear source first to force reload
-        gifSource = ""
-        // Add cache-busting parameter
         var separator = url.indexOf("?") >= 0 ? "&" : "?"
         gifSource = url + separator + "_t=" + Date.now()
     }
@@ -64,10 +61,12 @@ PlasmoidItem {
         AnimatedImage {
             id: gifImage
             anchors.fill: parent
-            cache: true
+            cache: false
             fillMode: Image.PreserveAspectFit
-            playing: true
             source: root.gifSource
+            onStatusChanged: {
+                if (status === AnimatedImage.Ready) playing = true
+            }
         }
 
         MouseArea {
