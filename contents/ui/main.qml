@@ -2,8 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
-import org.kde.kirigami as Kirigami
-import org.kde.plasma.components 3.0 as PlasmaComponents3
 
 PlasmoidItem {
     id: root
@@ -70,6 +68,19 @@ PlasmoidItem {
             fillMode: Image.PreserveAspectFit
             playing: true
             source: root.gifSource
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+                var station = Plasmoid.configuration.radarStation
+                if (station) {
+                    Qt.openUrlExternally("https://radar.weather.gov/station/" + station)
+                } else {
+                    Qt.openUrlExternally("https://weather.gov")
+                }
+            }
         }
     }
 
